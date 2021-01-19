@@ -1,0 +1,229 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>数据库设计-范式 | 一粒尘埃</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 5.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">数据库设计-范式</h1><a id="logo" href="/.">一粒尘埃</a><p class="description">纸上得来终觉浅，绝知此事要躬行</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">数据库设计-范式</h1><div class="post-meta">2018-09-01<span> | </span><span class="category"><a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></span></div><div class="post-content"><p>范式是符合某一种级别的关系模式的集合。关系型数据库中的关系必须满足一定的要求，满足不同程度要求的为不同范式。<br>目前关系数据库有六种范式：第一范式（1NF）、第二范式（2NF）、第三范式（3NF）、Boyce-Codd 范式（BCNF）、第四范式（4NF）和第五范式（5NF）。<br>范式越高，冗余最低，一般到三范式即可，再往上，表越多，可能导致查询效率下降。所以有时为了提高运行效率，可以让数据冗余</p>
+<a id="more"></a>
+
+<h2 id="一、第一范式（1NF）：确保每列的原子性"><a href="#一、第一范式（1NF）：确保每列的原子性" class="headerlink" title="一、第一范式（1NF）：确保每列的原子性"></a>一、第一范式（1NF）：确保每列的原子性</h2><p>数据表中的每一列（每个字段）必须是不可拆分的最小单元</p>
+<table>
+<thead>
+<tr>
+<th align="left">用户 ID</th>
+<th align="left">姓名</th>
+<th align="left">电话</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">10001</td>
+<td align="left">张三</td>
+<td align="left">0755-88888888 18888888888</td>
+</tr>
+</tbody></table>
+<p>上面的电话字段可以继续分固定电话和手机</p>
+<table>
+<thead>
+<tr>
+<th align="left">用户 ID</th>
+<th align="left">姓名</th>
+<th align="left">固定电话</th>
+<th align="left">手机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">10001</td>
+<td align="left">张三</td>
+<td align="left">0755-88888888</td>
+<td align="left">18888888888</td>
+</tr>
+</tbody></table>
+<h2 id="二、第二范式-2NF-：非键字段必须依赖于键字段"><a href="#二、第二范式-2NF-：非键字段必须依赖于键字段" class="headerlink" title="二、第二范式(2NF)：非键字段必须依赖于键字段"></a>二、第二范式(2NF)：非键字段必须依赖于键字段</h2><p>如果一个关系满足 1NF，并且除了主键以外的其它列，都依赖于该主键。也就是说在一个数据库表中必须有一个主键，没有包含在主键中的列必须完全依赖于主键，而不能只依赖于主键的一部分。</p>
+<p>比如说要设计一个订单信息表，所以要将订单编号和商品编号作为数据库的联合主键</p>
+<table>
+<thead>
+<tr>
+<th align="left">订单编号</th>
+<th align="left">商品编号</th>
+<th align="left">商品名称</th>
+<th align="left">数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">000001</td>
+<td align="left">p00001</td>
+<td align="left">宝马</td>
+<td align="left">1</td>
+</tr>
+</tbody></table>
+<p>商品名称跟订单编号无关而仅仅跟商品编号有关，这里违反了 2NF 的设计原则，会存在如下问题：</p>
+<ol>
+<li><strong>数据冗余</strong>：<br>一个产品销售了 n 次，“商品名称”就重复 n 次。</li>
+<li><strong>更新异常</strong>：<br>若调整了某商品的名称，数据表中所有行的“商品名称”值都要更新，否则会出现同一个商品名称不同的情况。</li>
+<li><strong>插入异常</strong>：<br>假设要新增新的商品，暂时还没有订单。这样，由于还没有“订单编号”关键字，“商品编号”和“商品名称”也无法记录入数据库。</li>
+<li><strong>删除异常</strong>：<br>假设要一批商品，这些商品信息就应该从数据库表中删除，与此同时，销售信息也被删除了。</li>
+</ol>
+<p>所以上面的表实际上可以拆分为</p>
+<table>
+<thead>
+<tr>
+<th align="left">订单编号</th>
+<th align="left">商品编号</th>
+<th align="left">数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">000001</td>
+<td align="left">p00001</td>
+<td align="left">1</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">商品编号</th>
+<th align="left">商品名称</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">p00001</td>
+<td align="left">宝马</td>
+</tr>
+</tbody></table>
+<h2 id="三、第三范式-3NF-：确保每列都和主键列直接相关-而不是间接相关"><a href="#三、第三范式-3NF-：确保每列都和主键列直接相关-而不是间接相关" class="headerlink" title="三、第三范式(3NF)：确保每列都和主键列直接相关,而不是间接相关"></a>三、第三范式(3NF)：确保每列都和主键列直接相关,而不是间接相关</h2><p>在第二范式的基础上，数据表中如果不存在非关键字段对任一候选关键字段的传递函数依赖则符合第三范式。<br>满足第三范式的数据库表应该不存在如下依赖关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">关键字段 → 非关键字段x → 非关键字段y</span><br></pre></td></tr></table></figure>
+<p>比如设计订单信息表</p>
+<table>
+<thead>
+<tr>
+<th align="left">订单编号</th>
+<th align="left">商品编号</th>
+<th align="left">数量</th>
+<th>业务员 Id</th>
+<th>业务员姓名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">000001</td>
+<td align="left">p00001</td>
+<td align="left">1</td>
+<td>10001</td>
+<td>张三</td>
+</tr>
+</tbody></table>
+<p>明显有 业务员姓名 -&gt; 业务员 Id -&gt; 订单编号 的依赖关系，它也会存在 <strong>数据冗余</strong>、<strong>更新异常</strong>、<strong>插入异常</strong>和 <strong>删除异常</strong> 的情况，上面表可以拆分为：</p>
+<table>
+<thead>
+<tr>
+<th align="left">订单编号</th>
+<th align="left">商品编号</th>
+<th align="left">数量</th>
+<th>业务员 Id</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">000001</td>
+<td align="left">p00001</td>
+<td align="left">1</td>
+<td>10001</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">业务员 Id</th>
+<th align="left">业务员姓名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">10001</td>
+<td align="left">张三</td>
+</tr>
+</tbody></table>
+<p>这样的数据库表是符合第三范式的，消除了 <strong>数据冗余</strong>、<strong>更新异常</strong>、<strong>插入异常</strong>和 <strong>删除异常</strong>。</p>
+<h2 id="四、Boyce-Codd-范式（BCNF）：主属性不依赖于主属性"><a href="#四、Boyce-Codd-范式（BCNF）：主属性不依赖于主属性" class="headerlink" title="四、Boyce-Codd 范式（BCNF）：主属性不依赖于主属性"></a>四、Boyce-Codd 范式（BCNF）：主属性不依赖于主属性</h2><p>在第三范式的基础上，数据库表中如果不存在任何字段对任一候选关键字段的传递函数依赖则符合第三范式。<br>假设仓库管理关系表为：</p>
+<table>
+<thead>
+<tr>
+<th align="left">仓库编号</th>
+<th align="left">商品编号</th>
+<th align="left">管理员编号</th>
+<th>数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">000001</td>
+<td align="left">000001</td>
+<td align="left">10001</td>
+<td>10</td>
+</tr>
+</tbody></table>
+<p>假设一个管理员只在一个仓库工作；一个仓库可以存储多种物品。这个数据库表中存在如下决定关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(仓库编号,商品编号) →(管理员编号,数量)</span><br><span class="line">(管理员编号,商品编号) → (仓库编号,数量)</span><br></pre></td></tr></table></figure>
+<p>所以，(仓库编号,商品编号)和(管理员编号,商品编号)都是候选关键字，表中的唯一非关键字段为数量，它是符合第三范式的。但是，由于存在如下决定关系：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(仓库编号) → (管理员编号)</span><br><span class="line">(管理员编号) → (仓库编号)</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>删除异常：<br>当仓库被清空后，所有”商品编号”和”数量”信息被删除的同时，”仓库编号”和”管理员编号”信息也被删除了。</p>
+</li>
+<li><p>插入异常：<br>当仓库没有存储任何物品时，无法给仓库分配管理员。</p>
+</li>
+<li><p>更新异常：<br>如果仓库换了管理员，则表中所有行的管理员编号 都要修改。</p>
+</li>
+</ol>
+<p>把仓库管理关系表分解为二个关系表：</p>
+<table>
+<thead>
+<tr>
+<th align="left">仓库编号</th>
+<th align="left">商品编号</th>
+<th align="left">数量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">000001</td>
+<td align="left">000001</td>
+<td align="left">10</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th align="left">仓库编号</th>
+<th align="left">管理员编号</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">10001</td>
+<td align="left">10001</td>
+</tr>
+</tbody></table>
+<p>这样的数据库表是符合 BCNF 范式的，消除了删除异常、插入异常和更新异常。</p>
+<p>还可以这么说：<strong>若一个关系达到了第三范式，并且它只有一个候选码，或者它的每个候选码都是单属性，则该关系自然达到 BCNF</strong>。</p>
+<h2 id="五、-第四范式-4NF-：要求把同一表内的多对多关系删除。"><a href="#五、-第四范式-4NF-：要求把同一表内的多对多关系删除。" class="headerlink" title="五、 第四范式(4NF)：要求把同一表内的多对多关系删除。"></a>五、 第四范式(4NF)：要求把同一表内的多对多关系删除。</h2><p>当一个表中的非主属性互相独立时（3NF），这些非主属性不应该有多值。若有多值就违反了第四范式。</p>
+<p>下面用户表符合 3NF ，但在某些情况下，比如说有两个手机号码时，这样的表还是不合理的，违反了 4NF。</p>
+<table>
+<thead>
+<tr>
+<th align="left">用户 ID</th>
+<th align="left">姓名</th>
+<th align="left">固定电话</th>
+<th align="left">手机</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">10001</td>
+<td align="left">张三</td>
+<td align="left">0755-88888888</td>
+<td align="left">18888888888</td>
+</tr>
+<tr>
+<td align="left">10001</td>
+<td align="left">张三</td>
+<td align="left">0755-88888888</td>
+<td align="left">18888888889</td>
+</tr>
+</tbody></table>
+<p>就可以拆分为固定电话表(用户 ID，固定电话)和手机号码表(用户 ID，手机号码)</p>
+<p>所以只有在某些特殊情况下，要考虑将表规范到第四范式。</p>
+<h2 id="六、-第五范式-5NF-：最终范式。"><a href="#六、-第五范式-5NF-：最终范式。" class="headerlink" title="六、 第五范式(5NF)：最终范式。"></a>六、 第五范式(5NF)：最终范式。</h2><p>满足第四范式条件下，表必须可以分解为较小的表，除非那些表在逻辑上拥有与原始表相同的主键。<br>比如一个销售信息表（销售人员，供应商，产品）。<br>在某些情况下，这个表中会产生一些冗余。可以将表分解为：</p>
+<ul>
+<li>销售人员供应商表（销售人员，供应商）；</li>
+<li>销售人员产品表（销售人员，产品）；</li>
+<li>供应商产品表（供应商，产品）</li>
+</ul>
+</div><div class="tags"><a href="/tags/MySQL/"><i class="fa fa-tag"></i>MySQL</a><a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/"><i class="fa fa-tag"></i>数据库设计</a></div><div class="post-nav"><a class="pre" href="/blog/adc3b0ca.html">数据库设计-约束</a><a class="next" href="/blog/613c929d.html">git操作失败小结</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://zubin.site"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E4%BB%96/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 15px;">学习笔记</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15px;">前端</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 15px;">作用域</a> <a href="/tags/%E9%97%AD%E5%8C%85/" style="font-size: 15px;">闭包</a> <a href="/tags/MongoDB/" style="font-size: 15px;">MongoDB</a> <a href="/tags/vim/" style="font-size: 15px;">vim</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 15px;">架构</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/KOA/" style="font-size: 15px;">KOA</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 15px;">记录</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/" style="font-size: 15px;">数据库设计</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/" style="font-size: 15px;">字符编码</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Express-js/" style="font-size: 15px;">Express.js</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/33429338.html">Express查询字符串数组解析为对象的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/36ce36ae.html">MongoDB索引笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/74188107.html">github缩写大全</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2669ab64.html">redis cluster的批量操作</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/aa3910a1.html">升级babel7踩坑记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/3575cee4.html">github-invalid-username-or-password</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/cd3a8f32.html">redis的过期策略和内存淘汰</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/7b57214c.html">记一次自动格式化的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/907c48d9.html">Docker中NPM报错could not get uid/gid错误</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/a0867b89.html">Jenkins配置NodeJS环境</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2021 <a href="/." rel="nofollow">一粒尘埃.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>

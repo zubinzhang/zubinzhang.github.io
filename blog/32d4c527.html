@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta http-equiv="content-type" content="text/html; charset=utf-8"><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"><meta content="yes" name="apple-mobile-web-app-capable"><meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"><meta content="telephone=no" name="format-detection"><meta name="description"><title>MVC、MVP、MVVM联系和区别 | 一粒尘埃</title><link rel="stylesheet" type="text/css" href="/css/style.css?v=1.0.0"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/normalize.css/normalize.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/pure-min.min.css"><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/purecss/build/grids-responsive-min.css"><link rel="stylesheet" href="//cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script><link rel="icon" mask="" sizes="any" href="/favicon.ico"><link rel="Shortcut Icon" type="image/x-icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/apple-touch-icon.png"><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon.png"><script type="text/javascript" src="//cdn.jsdelivr.net/npm/clipboard/dist/clipboard.min.js"></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.js"></script><link rel="stylesheet" href="//cdn.jsdelivr.net/gh/codeseven/toastr/build/toastr.min.css"><meta name="generator" content="Hexo 5.3.0"></head><body><div class="body_container"><div id="header"><div class="site-name"><h1 class="hidden">MVC、MVP、MVVM联系和区别</h1><a id="logo" href="/.">一粒尘埃</a><p class="description">纸上得来终觉浅，绝知此事要躬行</p></div><div id="nav-menu"><a class="current" href="/."><i class="fa fa-home"> 首页</i></a><a href="/archives/"><i class="fa fa-archive"> 归档</i></a><a href="/about/"><i class="fa fa-user"> 关于</i></a></div></div><div class="pure-g" id="layout"><div class="pure-u-1 pure-u-md-3-4"><div class="content_container"><div class="post"><h1 class="post-title">MVC、MVP、MVVM联系和区别</h1><div class="post-meta">2018-06-10<span> | </span><span class="category"><a href="/categories/%E5%85%B6%E4%BB%96/">其他</a></span></div><div class="clear"><div class="toc-article" id="toc"><div class="toc-title">文章目录</div><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MVC"><span class="toc-number">1.</span> <span class="toc-text">MVC</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MVP"><span class="toc-number">2.</span> <span class="toc-text">MVP</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#MVVM"><span class="toc-number">3.</span> <span class="toc-text">MVVM</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol></div></div><div class="post-content"><p>MVC、MVP、MVVM 这些模式是为了解决开发过程中的实际问题而提出来的，目前作为主流的几种架构模式而被广泛使用。</p>
+<a id="more"></a>
+
+<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><p>MVC（Model-View-Controller） 是表现层的框架模式，用于解除业务逻辑和视图之间的耦合，从而易于扩展，便于测试。<br>MVC 模式认为软件可以分成三个部分。</p>
+<ul>
+<li>视图（View）：用户界面。</li>
+<li>控制器（Controller）：业务逻辑</li>
+<li>模型（Model）：数据保存</li>
+</ul>
+<p>用户操作-&gt;View（负责接收用户的输入操作）-&gt;Controller（业务逻辑处理）-&gt;Model（数据持久化）-&gt;View（将结果反馈给 View）。</p>
+
+
+<p>优点：</p>
+<ul>
+<li>分层，结构清晰，耦合性低，大型项目代码的复用性得到极大的提高.</li>
+<li>开发人员分工明确，提高了开发的效率，维护方便，降低了维护成本。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>增加了系统结构和实现的复杂性</li>
+<li>视图与控制器间的过于紧密的连接</li>
+<li>视图对模型数据的低效率访问</li>
+<li>目前一般高级的界面工具或构造器不支持 MVC 模式</li>
+</ul>
+<h1 id="MVP"><a href="#MVP" class="headerlink" title="MVP"></a>MVP</h1><p>MVP 模式将 Controller 改名为 Presenter，同时改变了通信方向。目的就是为了完全切断 View 跟 Model 之间的联系，由 Presenter 充当桥梁，做到 View-Model 之间通信的完全隔离.</p>
+
+<p>主要的特点是：</p>
+<ol>
+<li> 各部分之间的通信，都是双向的。</li>
+<li> View 与 Model 不发生联系，都通过 Presenter 传递。</li>
+<li> View 非常薄，不部署任何业务逻辑，称为”被动视图”（Passive View），即没有任何主动性，而 Presenter 非常厚，所有逻辑都部署在那里。</li>
+</ol>
+<p>优点：</p>
+<ul>
+<li><p>便于测试。Presenter 对 View 是通过接口进行，在对 Presenter 进行不依赖 UI 环境的单元测试的时候。可以通过 Mock 一个 View 对象，这个对象只需要实现了 View 的接口即可。然后依赖注入到 Presenter 中，单元测试的时候就可以完整的测试 Presenter 业务逻辑的正确性。这里根据上面的例子给出了 Presenter 的单元测试样例。</p>
+</li>
+<li><p>View 可以进行组件化。在 MVP 当中，View 不依赖 Model。这样就可以让 View 从特定的业务场景中脱离出来，可以说 View 可以做到对业务逻辑完全无知。它只需要提供一系列接口提供给上层操作。这样就可以做高度可复用的 View 组件。</p>
+</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>Presenter 中除了业务逻辑以外，还有大量的 View-&gt;Model，Model-&gt;View 的手动同步逻辑，造成 Presenter 比较笨重，维护起来会比较困难。</li>
+</ul>
+<h1 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h1><p>MVVM 模式将 Presenter 改名为 ViewModel，基本上与 MVP 模式完全一致。</p>
+
+<p>唯一的区别是，它采用双向绑定（data-binding）：View 的变动，自动反映在 ViewModel，反之亦然。Angular 和 Ember 都采用这种模式。</p>
+<p>典型的应用有.NET 的 WPF，js 框架 Knockout、AngularJS 、Vue 等。</p>
+<p>优点：</p>
+<ul>
+<li>提高可维护性。解决了 MVP 大量的手动 View 和 Model 同步的问题，提供双向绑定机制。提高了代码的可维护性。</li>
+<li>简化测试。因为同步逻辑是交由 Binder 做的，View 跟着 Model 同时变更，所以只需要保证 Model 的正确性，View 就正确。大大减少了对 View 同步更新的测试。</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>过于简单的图形界面不适用，或说牛刀杀鸡。</li>
+<li>对于大型的图形应用程序，视图状态较多，ViewModel 的构建和维护的成本都会比较高。</li>
+<li>数据绑定的声明是指令式地写在 View 的模版当中的，这些内容是没办法去打断点 debug 的。</li>
+</ul>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a target="_blank" rel="noopener" href="http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html">http://www.ruanyifeng.com/blog/2015/02/mvcmvp_mvvm.html</a><br><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6a86f7fdc0cb">https://www.jianshu.com/p/6a86f7fdc0cb</a></p>
+</div><div class="tags"><a href="/tags/%E6%9E%B6%E6%9E%84/"><i class="fa fa-tag"></i>架构</a></div><div class="post-nav"><a class="pre" href="/blog/c1aebfdc.html">golang函数参数传递详解</a><a class="next" href="/blog/115dd571.html">panic和recover</a></div></div></div></div><div class="pure-u-1-4 hidden_mid_and_down"><div id="sidebar"><div class="widget"><form class="search-form" action="//www.google.com/search" method="get" accept-charset="utf-8" target="_blank"><input type="text" name="q" maxlength="20" placeholder="Search"/><input type="hidden" name="sitesearch" value="https://zubin.site"/></form></div><div class="widget"><div class="widget-title"><i class="fa fa-folder-o"> 分类</i></div><ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/JavaScript/">JavaScript</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%85%B6%E4%BB%96/">其他</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%90%8E%E7%AB%AF/">后端</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/">数据库</a></li></ul></div><div class="widget"><div class="widget-title"><i class="fa fa-star-o"> 标签</i></div><div class="tagcloud"><a href="/tags/Node-js/" style="font-size: 15px;">Node.js</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" style="font-size: 15px;">学习笔记</a> <a href="/tags/%E5%89%8D%E7%AB%AF/" style="font-size: 15px;">前端</a> <a href="/tags/%E4%BD%9C%E7%94%A8%E5%9F%9F/" style="font-size: 15px;">作用域</a> <a href="/tags/%E9%97%AD%E5%8C%85/" style="font-size: 15px;">闭包</a> <a href="/tags/MongoDB/" style="font-size: 15px;">MongoDB</a> <a href="/tags/vim/" style="font-size: 15px;">vim</a> <a href="/tags/%E6%9E%B6%E6%9E%84/" style="font-size: 15px;">架构</a> <a href="/tags/ES6/" style="font-size: 15px;">ES6</a> <a href="/tags/KOA/" style="font-size: 15px;">KOA</a> <a href="/tags/MySQL/" style="font-size: 15px;">MySQL</a> <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/" style="font-size: 15px;">计算机网络</a> <a href="/tags/git/" style="font-size: 15px;">git</a> <a href="/tags/%E8%AE%B0%E5%BD%95/" style="font-size: 15px;">记录</a> <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1/" style="font-size: 15px;">数据库设计</a> <a href="/tags/Redis/" style="font-size: 15px;">Redis</a> <a href="/tags/Linux/" style="font-size: 15px;">Linux</a> <a href="/tags/%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/" style="font-size: 15px;">字符编码</a> <a href="/tags/Docker/" style="font-size: 15px;">Docker</a> <a href="/tags/React/" style="font-size: 15px;">React</a> <a href="/tags/Express-js/" style="font-size: 15px;">Express.js</a></div></div><div class="widget"><div class="widget-title"><i class="fa fa-file-o"> 最近文章</i></div><ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/blog/33429338.html">Express查询字符串数组解析为对象的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/36ce36ae.html">MongoDB索引笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/74188107.html">github缩写大全</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/2669ab64.html">redis cluster的批量操作</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/aa3910a1.html">升级babel7踩坑记</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/3575cee4.html">github-invalid-username-or-password</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/cd3a8f32.html">redis的过期策略和内存淘汰</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/7b57214c.html">记一次自动格式化的问题</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/907c48d9.html">Docker中NPM报错could not get uid/gid错误</a></li><li class="post-list-item"><a class="post-list-link" href="/blog/a0867b89.html">Jenkins配置NodeJS环境</a></li></ul></div></div></div><div class="pure-u-1 pure-u-md-3-4"><div id="footer">Copyright © 2021 <a href="/." rel="nofollow">一粒尘埃.</a> Powered by<a rel="nofollow" target="_blank" href="https://hexo.io"> Hexo.</a><a rel="nofollow" target="_blank" href="https://github.com/tufu9441/maupassant-hexo"> Theme</a> by<a rel="nofollow" target="_blank" href="https://github.com/pagecho"> Cho.</a></div></div></div><a class="show" id="rocket" href="#top"></a><script type="text/javascript" src="/js/totop.js?v=1.0.0" async></script><script type="text/javascript" src="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.js" async></script><script type="text/javascript" src="/js/fancybox.js?v=1.0.0" async></script><link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox/dist/jquery.fancybox.min.css"><script type="text/javascript" src="/js/copycode.js" successtext="复制成功!"></script><link rel="stylesheet" type="text/css" href="/css/copycode.css"><script type="text/javascript" src="/js/codeblock-resizer.js?v=1.0.0"></script><script type="text/javascript" src="/js/smartresize.js?v=1.0.0"></script></div></body></html>
